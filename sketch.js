@@ -9,7 +9,7 @@ var printedArray;
 var sorterDone;
 var timer;
 var algorithms = ["quick sort", "heap sort", "merge sort", "selection sort (slow!)", "insertion sort (slow!)"];
-var sorters = [quickSortWrapper, heapSort, mergeSortWrapper, selectionSort, insertionSort];
+var sorters = [quickSort, heapSort, mergeSort, selectionSort, insertionSort];
 var currentSorter = 0;
 var algorithm;
 
@@ -90,11 +90,7 @@ function* insertionSort(A){
 	}
 }
 
-function mergeSortWrapper(A){
-	return mergeSort(A, 0, A.length-1);
-}
-
-function* mergeSort(A, start, stop) {
+function* mergeSort(A, start = 0, stop = A.length - 1) {
 	if(start < stop){
 		let split = floor((start+stop)/2);
 		var firstHalf = mergeSort(A, start, split);
@@ -129,11 +125,7 @@ function* merge(A, start, split, stop){
 	yield;
 }
 
-function quickSortWrapper(A){
-	return quickSort(A, 0, A.length-1);
-}
-
-function* quickSort(A, start, stop) {
+function* quickSort(A, start = 0, stop = A.length - 1) {
 	if(start < stop){
 		let pivot = A[stop];
 		let partition = start-1;

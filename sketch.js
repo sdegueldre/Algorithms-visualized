@@ -3,15 +3,41 @@ var number;
 var barWidth;
 var gap;
 var start;
-var flag;
 var sorter;
-var printedArray;
 var sorterDone;
 var timer;
-var algorithms = ["quick sort", "heap sort", "merge sort", "selection sort (slow!)", "insertion sort (slow!)"];
-var sorters = [quickSort, heapSort, mergeSort, selectionSort, insertionSort];
-var currentSorter = 0;
-var algorithm;
+var algorithms = {
+	"quick sort": quickSort,
+	"heap sort": heapSort,
+	"merge sort": mergeSort,
+	"selection sort": selectionSort,
+	"insertion sort": insertionSort,
+};
+
+const select = document.querySelector('select[name="algorithm"]')
+const playBtn = document.querySelector('#play');
+const pauseBtn = document.querySelector('#pause');
+const resetBtn = document.querySelector('#reset');
+let playing = false;
+
+function setPlayState(state) {
+	playing = state;
+	play.classList.toggle('d-none', state);
+	pause.classList.toggle('d-none', !state);
+}
+playBtn.addEventListener('click', () => {
+	setPlayState(true);
+});
+pauseBtn.addEventListener('click', () => {
+	setPlayState(false);
+});
+resetBtn.addEventListener('click', () => {
+	setPlayState(false);
+	setup();
+});
+select.addEventListener('change', () => {
+	sorter = algorithms[select.value](array);
+});
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
@@ -24,11 +50,7 @@ function setup() {
 		array[i] = random(0,1);
 	let graphWidth = number*(barWidth+gap)-gap;
 	start = floor((width-graphWidth)/2);
-	flag = false;
-	printedArray = false;
-	algorithm = algorithms[currentSorter];
-	textSize(25);
-	strokeWeight(4)
+	sorter = algorithms[select.value](array);
 }
 
 function draw() {
@@ -38,32 +60,14 @@ function draw() {
 	for(let i = 0; i < array.length; i++){
 		rect(start+i*(barWidth+gap), height, barWidth, -array[i]*(height-1));
 	}
-	if(sorter){
-		for(let i = 0; i < ceil(array.length/20); i++)
-			sorterDone = sorter.next().done;
-		
-		if(sorterDone){
-			sorter = undefined;
-			//console.log(new Date().getTime() - timer);
-			sorterDone = false;
+	if(playing){
+		for(let i = 0; i < ceil(array.length/20); i++) {
+			done = sorter.next().done;
+		}
+		if (done) {
+			setPlayState(false);
 		}
 	}
-	stroke(255);
-	text("Algorithm: " + algorithm, 15, 50);
-	noStroke();
-}
-
-function mousePressed() {
-	sorter = sorters[currentSorter](array);
-	if(flag){
-		sorter = undefined;
-		setup();
-	}
-	else{
-		timer = new Date().getTime();
-		flag = true;
-	}
-	redraw();
 }
 
 function* selectionSort(A){
@@ -205,17 +209,4 @@ function swap(A, i1, i2){
 	let temp = A[i1];
 	A[i1] = A[i2];
 	A[i2] = temp;
-}
-
-function keyPressed(){
-	switch(keyCode){
-	case UP_ARROW:
-		currentSorter--;
-		break;
-	case DOWN_ARROW:
-		currentSorter++;
-		break;
-	}
-	currentSorter = (currentSorter + algorithms.length)%algorithms.length;
-	algorithm = algorithms[currentSorter];
 }

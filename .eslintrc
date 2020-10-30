@@ -9,11 +9,12 @@
         "ecmaVersion": 2017,
         "sourceType": "module",
     },
+    "root": true,
     "rules": {
         "array-bracket-spacing": ["warn", "never"],
         "brace-style": "warn",
         "camelcase": ["warn", {"properties": "never"}],
-        "comma-dangle": ["off"],
+        "comma-dangle": ["error", "always-multiline"],
         "comma-spacing": ["warn", {"before": false, "after": true}],
         "curly": ["warn"],
         "no-debugger": ["warn"],

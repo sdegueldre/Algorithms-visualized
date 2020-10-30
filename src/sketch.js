@@ -175,6 +175,8 @@ new p5(sketch => {
 			isHeap = (heap[right] <= heap[index] && checkHeap(heap, right));
 		}
 		if (left < heap.length && isHeap) {
+			// https://github.com/eslint/eslint/issues/13780 Should not be needed here but at the declaration.
+			// eslint-disable-next-line no-unused-vars
 			isHeap = (heap[left] <= heap[index] && checkHeap(heap, left));
 		}
 		return isHeap;

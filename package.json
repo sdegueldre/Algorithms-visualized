@@ -1,0 +1,29 @@
+{
+  "name": "algorithms_visualized",
+  "version": "1.0.0",
+  "description": "A collection of algorithms and visualizations for them in javascript.",
+  "main": "sketch.js",
+  "dependencies": {},
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html --public-url /Algorithms-visualized --out-dir docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sdegueldre/Algorithms-visualized.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sdegueldre/Algorithms-visualized/issues"
+  },
+  "homepage": "https://github.com/sdegueldre/Algorithms-visualized#readme",
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
+}

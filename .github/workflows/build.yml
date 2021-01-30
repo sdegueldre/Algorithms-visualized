@@ -26,5 +26,6 @@ jobs:
         run: |
           git config --global user.name 'DocBuilder bot'
           git config --global user.email 'sdegueldre@users.noreply.github.com'
-          git commit -am "[INT] Automated docs folder rebuild"
+          git add docs
+          git commit -m "[INT] Automated docs folder rebuild"
           git push

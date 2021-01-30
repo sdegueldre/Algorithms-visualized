@@ -1,0 +1,29 @@
+name: Build project for gh-pages
+on: push
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.4'
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+
+      - run: npm run build
+
+      - name: Commit docs
+        run: |
+          git config --global user.name 'DocBuilder bot'
+          git config --global user.email 'sdegueldre@users.noreply.github.com'
+          git commit -am "[INT] Automated docs folder rebuild"
+          git push

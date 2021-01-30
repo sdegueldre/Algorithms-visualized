@@ -5,6 +5,7 @@
   "main": "sketch.js",
   "dependencies": {},
   "devDependencies": {
+    "cssnano": "^4.1.10",
     "eslint": "^7.12.1",
     "parcel": "^1.12.4"
   },

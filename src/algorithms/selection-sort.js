@@ -10,8 +10,8 @@ export default function* selectionSort(arr) {
         let min = i;
         for (let j = i; j < arr.length; j++) {
             min = arr[j] < arr[min] ? j : min;
+            yield;
         }
         swap(arr, i, min);
-        yield;
     }
 }

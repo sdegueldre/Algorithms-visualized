@@ -1,37 +1,39 @@
-export default function* mergeSort(arr, start = 0, stop = arr.length - 1) {
-    if (start < stop) {
+/**
+ * @param {number[]} arr the array to sort
+ * @param {number} [start=0] the start of the range to sort
+ * @param {number} [stop=arr.length] the end of the range to sort (excluded)
+ * @returns {Generator} A generator that will progressively sort the underlying
+ *  array
+ */
+export default function* mergeSort(arr, start = 0, stop = arr.length) {
+    if (stop > start + 1) {
         const split = Math.floor((start + stop) / 2);
-        const firstHalf = mergeSort(arr, start, split);
-        const secondHalf = mergeSort(arr, split + 1, stop);
-        const merger = merge(arr, start, split, stop);
-        while (!firstHalf.next().done) {
-            yield;
-        }
-        while (!secondHalf.next().done) {
-            yield;
-        }
-        while (!merger.next().done) {
-            yield;
-        }
+        yield* mergeSort(arr, start, split);
+        yield* mergeSort(arr, split, stop);
+        yield* merge(arr, start, split, stop);
     }
     yield;
 }
-
+/**
+ * @param {number[]} arr the array containing the sorted ranges to merge
+ * @param {number} start the start of the first range to merge
+ * @param {number} split the end of the first range and start of the second
+ * @param {number} stop the end of the second range to merge
+ * @returns {Generator} A generator that will progressively merge the ranges
+ *  into the underlying array
+ */
 function* merge(arr, start, split, stop) {
-    const L = arr.slice(start, split + 1);
-    L[L.length] = 2;
-    const R = arr.slice(split + 1, stop + 1);
-    R[R.length] = 2;
+    const left = arr.slice(start, split);
+    const right = arr.slice(split, stop);
     let i = 0, j = 0;
-    for (let k = start; k <= stop; k++) {
-        if (L[i] <= R[j]) {
-            arr[k] = L[i];
+    for (let k = start; k < stop; k++) {
+        if (j >= right.length || left[i] < right[j]) {
+            arr[k] = left[i];
             i++;
         } else {
-            arr[k] = R[j];
+            arr[k] = right[j];
             j++;
         }
         yield;
     }
-    yield;
 }

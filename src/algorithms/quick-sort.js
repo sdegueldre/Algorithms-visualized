@@ -1,25 +1,24 @@
 import {swap} from '../utils.js';
 
-export default function* quickSort(arr, start = 0, stop = arr.length - 1) {
-    if (start < stop) {
-        const pivot = arr[stop];
-        let partition = start - 1;
+/**
+ * @param {number[]} arr the array to sort
+ * @param {number} [start=0] the start of the range to sort
+ * @param {number} [stop=arr.length] the end of the range to sort (excluded)
+ * @returns {Generator} A generator that will progressively sort the underlying
+ *  array
+ */
+export default function* quickSort(arr, start = 0, stop = arr.length) {
+    if (stop > start + 1) {
+        const pivot = arr[stop - 1];
+        let partition = start;
         for (let j = start; j < stop; j++) {
-            if (arr[j] < pivot) {
-                partition++;
+            if (arr[j] <= pivot) {
                 swap(arr, partition, j);
+                yield;
+                partition++;
             }
-            yield;
         }
-        swap(arr, partition + 1, stop);
-        yield;
-        const left = quickSort(arr, start, partition);
-        const right = quickSort(arr, partition + 2, stop);
-        while (!left.next().done) {
-            yield;
-        }
-        while (!right.next().done) {
-            yield;
-        }
+        yield* quickSort(arr, start, partition - 1);
+        yield* quickSort(arr, partition - 1, stop);
     }
 }

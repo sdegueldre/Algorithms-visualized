@@ -22,9 +22,15 @@
     <div style="position: absolute; padding-left: 10px; padding-top: 5px; background-color: #FFFD">
         <label>Algorithm:
             <select name="algorithm"></select>
-            <button id="play">▶</button>
-            <button id="pause" class="d-none">⏸</button>
-            <button id="reset">Reset</button>
+        </label>
+        <button id="play">▶</button>
+        <button id="pause" class="d-none">⏸</button>
+        <button id="reset">Reset</button>
+        <label>Bar width:
+            <input type="range" min="0" max="6" name="bar-width" value="0" step=".1">
+        </label>
+        <label name="time-step">Time step:
+            <input type="range" min="-10" max="10" value="-1" step=".1"><span>(0.500ms)</span>
         </label>
     </div>
     <script src="./sketch.js"></script>

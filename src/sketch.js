@@ -10,10 +10,13 @@ const select = document.querySelector('select[name="algorithm"]');
 const playBtn = document.querySelector('#play');
 const pauseBtn = document.querySelector('#pause');
 const resetBtn = document.querySelector('#reset');
+const barWidthInput = document.querySelector('input[name="bar-width"]');
+const timeStepInput = document.querySelector('label[name="time-step"] > input');
+const timeStepDisplay = document.querySelector('label[name="time-step"] > span');
 const algorithms = {
-	"quick sort": quickSort,
 	"heap sort": heapSort,
 	"merge sort": mergeSort,
+	"quick sort": quickSort,
 	"selection sort (slow)": selectionSort,
 	"insertion sort (slow)": insertionSort,
 };
@@ -23,12 +26,14 @@ Object.keys(algorithms).forEach(algorithm => {
 	select.appendChild(option);
 });
 const array = [];
-const barWidth = 1;
 const gap = 0;
+let barWidth = 1;
+let timeStep = .5;
 let playing = false;
 let sorter;
 let offsetLeft;
 let sketch;
+let simulationTime;
 
 function setPlayState(state) {
 	playing = state;
@@ -36,6 +41,7 @@ function setPlayState(state) {
 	pauseBtn.classList.toggle('d-none', !state);
 }
 playBtn.addEventListener('click', () => {
+	simulationTime = Date.now();
 	setPlayState(true);
 });
 pauseBtn.addEventListener('click', () => {
@@ -45,9 +51,16 @@ resetBtn.addEventListener('click', () => {
 	setPlayState(false);
 	setup();
 });
-
 select.addEventListener('change', () => {
 	sorter = algorithms[select.value](array);
+});
+barWidthInput.addEventListener('input', () => {
+	barWidth = Math.ceil(2 ** parseFloat(barWidthInput.value));
+	setup();
+});
+timeStepInput.addEventListener('input', () => {
+	timeStep = 2 ** parseFloat(timeStepInput.value);
+	timeStepDisplay.textContent = `(${timeStep.toFixed(3)}ms)`;
 });
 const resize = debounce(() => setup(), 200);
 window.addEventListener('resize', () => {
@@ -67,14 +80,15 @@ function setup() {
 	sorter = algorithms[select.value](array);
 }
 
-function draw() {
+function draw(dt) {
 	sketch.background('white');
 	sketch.fill('black');
 	for (let i = 0; i < array.length; i++) {
 		sketch.rect(offsetLeft + i * (barWidth + gap), sketch.height, barWidth, -array[i] * (sketch.height - 1));
 	}
 	if (playing) {
-		for (let i = 0; i < Math.ceil(array.length / 20); i++) {
+		simulationTime += timeStep * Math.floor(dt / timeStep);
+		for (let i = 0; i < Math.floor(dt / timeStep); i++) {
 			if (sorter.next().done) {
 				setPlayState(false);
 				sorter = algorithms[select.value](array);
@@ -85,7 +99,7 @@ function draw() {
 }
 
 function render() {
-	draw();
+	draw(Date.now() - simulationTime);
 	requestAnimationFrame(render);
 }
 

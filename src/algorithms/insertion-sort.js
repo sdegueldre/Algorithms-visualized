@@ -1,3 +1,8 @@
+/**
+ * @param {number[]} arr the array to sort
+ * @returns {Generator} A generator that will progressively sort the underlying
+ *  array
+ */
 export default function* insertionSort(arr) {
     for (let i = 1; i < arr.length; i++) {
         const key = arr[i];

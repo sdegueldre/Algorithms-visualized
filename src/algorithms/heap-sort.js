@@ -8,7 +8,7 @@ import {swap} from '../utils.js';
 export default function* heapSort(arr) {
     yield* buildMaxHeap(arr);
     for (let i = arr.length - 1; i >= 0; i--) {
-        swap(arr, i, 0);
+        yield *swap(arr, i, 0);
         yield* maxHeapify(arr, i, 0);
     }
 }
@@ -33,15 +33,18 @@ function* maxHeapify(arr, heapSize, index) {
     const right = 2 * (index + 1);
     const left = right - 1;
     let largest = index;
+    yield 'read';
+    yield 'read';
     if (left < heapSize && arr[left] > arr[largest]) {
         largest = left;
     }
+    yield 'read';
+    yield 'read';
     if (right < heapSize && arr[right] > arr[largest]) {
         largest = right;
     }
     if (largest !== index) {
-        swap(arr, index, largest);
-        yield;
+        yield* swap(arr, index, largest);
         yield* maxHeapify(arr, heapSize, largest);
     }
 }

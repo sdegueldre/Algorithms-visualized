@@ -12,7 +12,6 @@ export default function* mergeSort(arr, start = 0, stop = arr.length) {
         yield* mergeSort(arr, split, stop);
         yield* merge(arr, start, split, stop);
     }
-    yield;
 }
 /**
  * @param {number[]} arr the array containing the sorted ranges to merge
@@ -23,17 +22,25 @@ export default function* mergeSort(arr, start = 0, stop = arr.length) {
  *  into the underlying array
  */
 function* merge(arr, start, split, stop) {
+    for (let i = start; i < stop; i++) {
+        yield 'read'; // All reads needed by both slices
+    }
     const left = arr.slice(start, split);
     const right = arr.slice(split, stop);
     let i = 0, j = 0;
     for (let k = start; k < stop; k++) {
+        yield 'read';
+        yield 'read';
         if (j >= right.length || left[i] < right[j]) {
+            yield 'read';
             arr[k] = left[i];
+            yield 'write';
             i++;
         } else {
+            yield 'read';
             arr[k] = right[j];
+            yield 'write';
             j++;
         }
-        yield;
     }
 }

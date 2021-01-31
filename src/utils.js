@@ -6,6 +6,10 @@ export const debounce = (f, delay) => {
 	};
 };
 
-export const swap = (arr, i, j) => {
+export const swap = function* (arr, i, j) {
+	yield 'read';
+	yield 'read';
     [arr[i], arr[j]] = [arr[j], arr[i]];
+	yield 'write';
+	yield 'write';
 };

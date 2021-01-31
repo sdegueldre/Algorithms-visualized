@@ -9,12 +9,13 @@ import {swap} from '../utils.js';
  */
 export default function* quickSort(arr, start = 0, stop = arr.length) {
     if (stop > start + 1) {
+        yield 'read';
         const pivot = arr[stop - 1];
         let partition = start;
         for (let j = start; j < stop; j++) {
+            yield 'read';
             if (arr[j] <= pivot) {
-                swap(arr, partition, j);
-                yield;
+                yield* swap(arr, partition, j);
                 partition++;
             }
         }

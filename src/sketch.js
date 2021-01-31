@@ -89,7 +89,9 @@ function draw(dt) {
 	if (playing) {
 		simulationTime += timeStep * Math.floor(dt / timeStep);
 		for (let i = 0; i < Math.floor(dt / timeStep); i++) {
-			if (sorter.next().done) {
+			// eslint-disable-next-line no-unused-vars
+			const {value, done} = sorter.next();
+			if (done) {
 				setPlayState(false);
 				sorter = algorithms[select.value](array);
 				break;
